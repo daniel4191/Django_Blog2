@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다니엘의 홈페이지</title>
+    <link href="./practice.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <nav>
+        <a href="./index.html">Home</a>
+        <a href="./blog_list.html">Blog</a>
+        <a href="./about_me.html">About Me</a>
+    </nav>
+
+    <h1>첫번째 크기 헤드라인</h1>
+    <h2>두번째 크기 헤드라인</h2>
+    <h3>세번째 크기 헤드라인</h3>
+    <h4>네번째 크기 헤드라인</h4>
+    <h5>다섯번째 크기 헤드라인</h5>
+    <p>문단은 p로 쓰세요. p는 아마도 Paragraph의 앞글자를 따온 것이겠죠?</p>
+    <a href="https://www.google.com/">Go to google</a>
+    <hr>
+    <img src="./images/gyeong_ju.jpeg" width="600px">
+
+    <button onclick="whatTimeIsIt()">현재시간</button>
+    <hr>
+
+    <!-- 문제 입력 -->
+    <label for="inputA">a</label>
+    <input id="inputA" value=1 onkeyup="doSomething()">
+    <label for="inputB">b</label>
+    <input id="inputB" value=2 onkeyup="doSomething()">
+
+    <!-- 문제 해답 -->
+    <p><span id="valueA">1</span> + <span id="valueB">2</span> =
+        <span id="valueC">3</span>입니다.
+    </p>
+
+    <!-- JavaScript Line -->
+
+    <!-- <script type="text/javascript">
+        // Calculator
+        function doSomething() {
+            let a = document.getElementById('inputA').value;
+            let b = document.getElementById('inputB').value;
+            document.getElementById("valueA").innerHTML = a;
+            document.getElementById("valueB").innerHTML = b;
+            document.getElementById("valueC").innerHTML = Number(a) + Number(b);
+        }
+
+        // Now Time
+        function whatTimeIsIt() {
+            alert(new Date());
+        }
+    </script> -->
+
+    <!-- JavaScript Link -->
+    <script type="text/javascript" src="add_two_numbers.js"></script>
+    <script type="text/javascript" src="what_time_is_it.js"></script>
+
+</body>
+
+</html>
