@@ -1,0 +1,17 @@
+# created by virtualenv automatically
+# 이것 자체가 "전체"라는 의미인데, 전체의 범위를 모르겠다. 아마 이 파일이 들어있는 "venv"폴더 내부에 있는 것만 모두 gitignore가 적용되는건
+# 아닌가 싶다
+#*
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Pycharm
+.idea/
+migrations/
