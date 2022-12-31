@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .models import Post
 
@@ -33,7 +33,25 @@ class PostList(ListView):
     ordering = '-pk'
 
 
-def single_post_page(request, pk):
-    post = Post.objects.get(pk = pk)
+# def single_post_page(request, pk):
+#     post = Post.objects.get(pk = pk)
+#
+#     return render(request, 'blog/post_detail.html', {'post':post})
 
-    return render(request, 'blog/single_post_page.html', {'post':post})
+# 위의 single_post_page를 CBV 방식으로 대체
+class PostDetail(DetailView):
+    model = Post
+
+    # DetailView도 ListView와 마찬가지로 template_name을 따로 지정해주면 그 파일로,
+    # 그렇지 않으면 "post_detail.html"이라는 이름의 파일로 데이터셋을 보내게 된다.
+    # 보통 각 CBV 방식에 대해서 template_name을 따로 지정하지 않으면 "어떤 이름으로 자동배정 되는가"가
+    # 궁금하다면, 일단 실핼 했을때 에러 메세지로 나오게 된다.
+    # 정확히는 동일한 앱 내에서만 데이터를 보내주는 것 같다.
+    # 데이터셋을 전달할때는 ListView와는 약간 다르게 "<클래스명>"이다. 하지만 클래스명은 파이썬 문법적으로
+    # 첫 문자는 대문자로 사용하는 반면, 전달되는 데이터셋은 대문자가 없는, 이를테면 Post를 model에 지정해줬다면
+    # post라는 데이터셋이 post_detail.html이라는 이름의 파일로 가게된다 (template_name에 별도로 설정할경우 그곳으로)
+
+
+    # 에러 메세지
+    # TemplateDoesNotExist at /blog/2/
+    # blog/post_detail.html
