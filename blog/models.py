@@ -13,3 +13,7 @@ class Post(models.Model):
 
     def __str__(self):
         return f'[{self.pk}]{self.title}'
+
+    # 이것을추가해 줌으로써 admin 페이지에서 볼때는 "View on site"라는 버튼이 생성되었다.
+    def get_absolute_url(self):
+        return f'/blog/{self.pk}'
