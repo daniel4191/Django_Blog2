@@ -15,3 +15,4 @@ venv.bak/
 # Pycharm
 .idea/
 migrations/
+_media/

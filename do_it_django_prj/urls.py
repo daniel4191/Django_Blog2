@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
     path('', include('single_pages.urls'))
 ]
+
+# 미디어 파일저장을 위한 것이라고는 하는데, 정확히 잘 모르겠다.
+# 왜냐면 이미 파일저장을 위한 세팅들을 settings라든지 models에 등록해놓았기 때문이다.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -122,10 +123,13 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
 # static 폴더도 프로젝트, 앱단위의 폴더와 동등선상에 놓겠다는 의미
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+MEDIA_URL = '/media/'
+# 웹브라우저 도메인 뒤에 media/라고 되면 미디어 파일을 "프로젝트 단위, 앱단위 의 폴더"와
+# 동등선상에 _media라는 이름의 폴더를 만들고 거기에 저장한다는 의미
+MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
