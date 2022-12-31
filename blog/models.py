@@ -18,6 +18,9 @@ class Post(models.Model):
     # 즉, 이 경우에는 "이미지 업로드를 해도되고 안해도되"라는 의미
     head_image = models.ImageField(
         upload_to='blog/images/%Y/%m/%d/', blank=True)
+    file_upload = models.FileField(
+        upload_to='blog/files/%Y/%m/%d/', blank=True)
+
     # auto_now_add는 "최초 저장시"에만 저장이 되고
     created_at = models.DateTimeField(auto_now_add=True)
     # auto_now는 "수정 후 save를 할때마다"최신화 되어 적용된다.
