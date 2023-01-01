@@ -5,8 +5,26 @@ from django.db import models
 # Create your models here.
 
 
+# 사용법 설명
+# def (함수)
+# 기본적으로 class 내부에 정의되는 def 함수들은 추후, urls, views를 통해서 연결된 html에서
+# <class명>.<함수명>으로 사용 가능하다
+# 예시: {{ post.get_absolute_url }}
+
+# title, hook_text, content같이 그냥 변수
+# 클래스에 직접적으로 생성되어있는 변수들은
+# 보통 urls, views를 통해서 연결된 html 파일에 데이터를 보내주며
+# 기본적으로는 "반복문"조합으로 써준다.
+# 이를테면 Post라는 하나의 클래스가 담고 있는 데이터셋은 views를 거쳐서 CBV방식의 경우
+# post_list 라는 이름으로 보내지게 된다.
+# 이런 "덩어리 데이터셋"을 for i in post_list
+# 이런식으로 풀어주게 되고
+# i.title, i.hook_"text, i.content
+# 이런식으로 사용하게 되는 것이다.
 class Post(models.Model):
     title = models.CharField(max_length=30)
+    # 노출되는 글씨의 수를 제한적으로 보여주는 소제목의 용도로 사용하기 위해 만든다고 보면 될것같다
+    hook_text = models.CharField(max_length=100, blank=True)
     content = models.TextField()
 
     # 설명1. upload_to

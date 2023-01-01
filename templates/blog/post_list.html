@@ -105,7 +105,14 @@
                     {% endif %}
                     <div class="card-body">
                         <h2 class="card-title">{{ p.title }}</h2>
-                        <p class="card-text">{{ p.content }}</p>
+                        <!-- 소제목 코드 start -->
+                        {% if p.hook_text %}
+                        <h5 class="text-muted">{{ p.hook_text }}</h5>
+                        {% endif %}
+                        <!-- 소제목 코드 end -->
+                        
+                        <!-- 45개의 단어만 출력해준다는 필터 추가 -->
+                        <p class="card-text">{{ p.content|truncatewords:45 }}</p>
                         <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
                     </div>
                     {% comment %} 새로 추가된 부분 {% endcomment %}
