@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 
 # Create your models here.
@@ -33,3 +35,11 @@ class Post(models.Model):
     # 이것을추가해 줌으로써 admin 페이지에서 볼때는 "View on site"라는 버튼이 생성되었다.
     def get_absolute_url(self):
         return f'/blog/{self.pk}'
+
+    # 첨부파일의 이름을 확인
+    def get_file_name(self):
+        return os.path.basename(self.file_upload.name)
+
+    # 첨부파일의 확장자를 확인
+    def get_file_ext(self):
+        return self.file_name().split('.')[-1]
