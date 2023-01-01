@@ -89,8 +89,12 @@
 
     <div class="container my-3">
         <div class="row">
-            <div class="col-md-8 col-lg-9">
+            <div class="col-md-8 col-lg-9" id="main-area">
                 <h1>Blog</h1>
+
+                <!-- tests.py의 마지막에 포스트가 없을경우 '아직 게시물이 없습니다.'를 만들어 주기 위한
+                if 문 -->
+                {% if post_list.exists %}
 
                 <!-- Django added -->
                 {% for p in post_list %}
@@ -110,7 +114,7 @@
                         <h5 class="text-muted">{{ p.hook_text }}</h5>
                         {% endif %}
                         <!-- 소제목 코드 end -->
-                        
+
                         <!-- 45개의 단어만 출력해준다는 필터 추가 -->
                         <p class="card-text">{{ p.content|truncatewords:45 }}</p>
                         <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
@@ -123,6 +127,9 @@
                 </div>
                 <!-- Blog post end -->
                 {% endfor %}
+                {% else %}
+                <h3>아직 게시물이 없습니다.</h3>
+                {% endif %}
 
                 <!-- Pagination start-->
                 <nav aria-label="Pagination">
