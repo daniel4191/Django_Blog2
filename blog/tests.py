@@ -12,6 +12,23 @@ class TestView(TestCase):
     def setUp(self):
         self.client = Client()
 
+    def navbar_test(self, soup):
+        navbar = soup.nav
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About Me', navbar.text)
+
+        logo_btn = navbar.find('a', text='Do it Django')
+        self.assertEqual(logo_btn.attrs['href'], '/')
+
+        home_btn = navbar.find('a', text='Home')
+        self.assertEqual(home_btn.attrs['href'], '/')
+
+        blog_btn = navbar.find('a', text='Blog')
+        self.assertEqual(blog_btn.attrs['href'], '/blog/')
+
+        about_me_btn = navbar.find('a', text='About Me')
+        self.assertEqual(about_me_btn.attrs['href'], '/about_me/')
+
     def test_post_list(self):
         # 1.1 포스트 목록 페이지를 가져온다.
         response = self.client.get('/blog/')
@@ -21,10 +38,11 @@ class TestView(TestCase):
         soup = BeautifulSoup(response.content, 'html.parser')
         self.assertEqual(soup.title.text, 'Blog')
         # 1.4 네비게이션 바가 있다.
-        navbar = soup.nav
+        # navbar = soup.nav
         # 1.5 Blog, About Me라는 문구가 내비게이션 바에 있다.
-        self.assertIn('Blog', navbar.text)
-        self.assertIn('About Me', navbar.text)
+        # self.assertIn('Blog', navbar.text)
+        # self.assertIn('About Me', navbar.text)
+        self.navbar_test(soup)
 
         # 2.1 메인 영역에 기시물이 하나도 없다면
         self.assertEqual(Post.objects.count(), 0)
@@ -56,3 +74,38 @@ class TestView(TestCase):
 
         # 3.4 '아직 게시물이 업습니다'라는 문구는 더 이상 보이지 않는다.
         self.assertNotIn('아직 게시물이 없습니다.', main_area.text)
+
+    def test_post_detail(self):
+        post_000 = Post.objects.create(
+            title='첫번째 포스트 입니다.',
+            content='Hello World. We are the world'
+        )
+
+        self.assertEqual(post_000.get_absolute_url(), '/blog/1/')
+        response = self.client.get(post_000.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        self.navbar_test(soup)
+        self.category_card_test(soup)
+
+        self.assertIn(self.post_001.title, soup.title.text)
+
+        main_area = soup.find('div', id='main-area')
+        post_area = main_area.find('div', id='post-area')
+        self.assertIn(self.post_001.title, post_area.text)
+        self.assertIn(self.category_programming.name, post_area.text)
+
+        self.assertIn(self.user_trump.username.upper(), post_area.text)
+        self.assertIn(self.post_001.content, post_area.text)
+
+        self.assertIn(self.tag_hello.name, post_area.text)
+        self.assertNotIn(self.tag_python.name, post_area.text)
+        self.assertNotIn(self.tag_python_kor.name, post_area.text)
+
+        # comment area
+        comments_area = soup.find('div', id='comment-area')
+        comment_001_area = comments_area.find('div', id='comment-1')
+        self.assertIn(comment_001.author.username, comment_001_area.text)
+        self.assertIn(self.comment_001.content, comment_001_area.text)
