@@ -47,7 +47,12 @@ class Post(models.Model):
     # auto_now는 "수정 후 save를 할때마다"최신화 되어 적용된다.
     updated_at = models.DateTimeField(auto_now=True)
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 기존 author 모델이고, 이대로 사용할 시, 작성자(author를 삭제하면 이 작성자가 작성한
+    # 게시글은 모조리 삭제된다.
+    # author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    # SET_NULL을 하게되면 작성자 계정이 사라져도 게시글은 남아있다.
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author}'
