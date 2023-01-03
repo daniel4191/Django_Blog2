@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post, Category, Tag
 
@@ -114,3 +115,20 @@ def tag_page(request, slug):
         'categories': Category.objects.all(),
         'no_category_post_count': Post.objects.filter(category=None).count()
     })
+
+
+class PostCreate(LoginRequiredMixin, CreateView):
+    model = Post
+    # 여기서 author, created_at, tags는 뺐다.
+    # 이 부분들은 추후 로그인 후에 작성하게 되면 보완되는 사항들이기 때문이다.
+    fields = ['title', 'hook_text', 'content',
+              'head_image', 'file_upload', 'category']
+
+    def form_valid(self, form):
+        current_user = self.request.user
+        # is_authenticated로 로그인을 한 상태 확인이 가능하다.
+        if current_user.is_authenticated:
+            form.instance.author = current_user
+            return super(PostCreate, self).form_valid(form)
+        else:
+            return redirect('/blog/')
