@@ -1,5 +1,16 @@
 {% extends 'blog/base.html' %}
 {% block main_area %}
+
+<!-- 로그인 했을때 New Post 버튼 표시 start -->
+{% if user.is_authenticated %}
+    {% if user.is_superuser or user.is_staff %}
+    <a class="btn btn-success btn-sm float-right" href="/blog/create_post/" role="button">
+        <i class="fas fa-pen"></i>&nbsp;&nbsp;New Post
+    </a>
+    {% endif %}
+{% endif %}
+<!-- 로그인 했을때 New Post 버튼 표시 end -->
+
 <h1>Blog
         {% if category %}<span class="badge badge-success">{{ category }}</span>
     {% endif %}
