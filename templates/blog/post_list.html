@@ -1,9 +1,9 @@
 {% extends 'blog/base.html' %}
 {% block main_area %}
-<h1>
-    Blog {% if category %}
-    <span class="badge badge-success">{{ category }}</span>
+<h1>Blog
+        {% if category %}<span class="badge badge-success">{{ category }}</span>
     {% endif %}
+        {% if tag %}<span class="badge badge-success"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
 </h1>
 
 <!-- tests.py의 마지막에 포스트가 없을경우 '아직 게시물이 없습니다.'를 만들어 주기 위한
@@ -23,9 +23,9 @@ if 문 -->
     {% endif %}
     <div class="card-body">
         {% if p.category %}
-        <span class="badge badge-secondary float-right">{{ p.category }}</span>
+        <span class="badge badge-success float-right">{{ p.category }}</span>
         {% else %}
-        <span class="badge badge-secondary float-right">미분류</span>
+        <span class="badge badge-success float-right">미분류</span>
         {% endif %}
         <h2 class="card-title">{{ p.title }}</h2>
         <!-- 소제목 코드 start -->
@@ -36,11 +36,12 @@ if 문 -->
 
         <!-- tag filter start -->
         {% if p.tags.exists %}
-        <i class="fa-regular fa-tags"></i>
+            <i class="fa-solid fa-tags"></i>
             {% for tag in p.tags.iterator %}
             <a href="{{ tag.get_absolute_url }}">
-                <span class="badge badge-pill badge-light">{{ tag }}</span></a>
+                <span class="badge badge-pill badge-success">{{ tag }}</span></a>
             {% endfor %}
+            
             <br>
             <br>
         {% endif %}
@@ -48,7 +49,7 @@ if 문 -->
 
         <!-- 45개의 단어만 출력해준다는 필터 추가 -->
         <p class="card-text">{{ p.content|truncatewords:45 }}</p>
-        <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
+        <a class="btn btn-success" href="{{ p.get_absolute_url }}">Read more →</a>
     </div>
     {% comment %} 새로 추가된 부분 {% endcomment %}
     <div class="card-footer text-muted">
