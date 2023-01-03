@@ -16,5 +16,6 @@ urlpatterns = [
     path('', views.PostList.as_view()),
     # path('<int:pk>/', views.single_post_page)
     # 위의 방식은 FBV 방식, 아래꺼는 CBV방식
-    path('<int:pk>/', views.PostDetail.as_view())
+    path('<int:pk>/', views.PostDetail.as_view()),
+    path('category/<str:slug>/', views.category_page)
 ]

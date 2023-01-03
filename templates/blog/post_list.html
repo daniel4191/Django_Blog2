@@ -1,6 +1,10 @@
 {% extends 'blog/base.html' %}
 {% block main_area %}
-<h1>Blog</h1>
+<h1>
+    Blog {% if category %}
+    <span class="badge badge-success">{{ category }}</span>
+    {% endif %}
+</h1>
 
 <!-- tests.py의 마지막에 포스트가 없을경우 '아직 게시물이 없습니다.'를 만들어 주기 위한
 if 문 -->

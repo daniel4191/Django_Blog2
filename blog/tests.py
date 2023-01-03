@@ -44,21 +44,21 @@ class TestView(TestCase):
             author=self.user_obama
         )
 
-        def category_card_test(self, soup):
-            categories_card = soup.find('div', id='categories-card')
-            self.assertIn('Categories', categories_card.text)
-            self.assertIn(
-                f'{self.category_programming.name} ({self.category_programming.post_set.count()})', categories_card.text)
-            self.assertIn(
-                f'{self.category_music.name} ({self.category_music.post_set.count()})', categories_card.text)
-            self.assertIn(f'미분류 (1)', categories_card.text)
+    def category_card_test(self, soup):
+        categories_card = soup.find('div', id='categories-card')
+        self.assertIn('Categories', categories_card.text)
+        self.assertIn(
+            f'{self.category_programming.name} ({self.category_programming.post_set.count()})', categories_card.text)
+        self.assertIn(
+            f'{self.category_music.name} ({self.category_music.post_set.count()})', categories_card.text)
+        self.assertIn(f'미분류 (1)', categories_card.text)
 
     def navbar_test(self, soup):
         navbar = soup.nav
         self.assertIn('Blog', navbar.text)
         self.assertIn('About Me', navbar.text)
 
-        logo_btn = navbar.find('a', text='Do it Django')
+        logo_btn = navbar.find('a', text='Do It Django')
         self.assertEqual(logo_btn.attrs['href'], '/')
 
         home_btn = navbar.find('a', text='Home')
@@ -69,6 +69,23 @@ class TestView(TestCase):
 
         about_me_btn = navbar.find('a', text='About Me')
         self.assertEqual(about_me_btn.attrs['href'], '/about_me/')
+
+    def test_category_page(self):
+        response = self.client.get(
+            self.category_programming.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.navbar_test(soup)
+        self.category_card_test(soup)
+
+        self.assertIn(self.category_programming.name, soup.h1.text)
+
+        main_area = soup.find('div', id='main-area')
+        self.assertIn(self.category_programming.name, main_area.text)
+        self.assertIn(self.post_001.title, main_area.text)
+        self.assertNotIn(self.post_002.title, main_area.text)
+        self.assertNotIn(self.post_003.title, main_area.text)
 
     def test_post_list(self):
         '''
@@ -175,9 +192,9 @@ class TestView(TestCase):
         #     author=self.user_trump
         # )
 
-        self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
+        self.assertEqual(self.post_001.get_absolute_url(), '/blog/1/')
 
-        response = self.client.get(post_001.get_absolute_url())
+        response = self.client.get(self.post_001.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
 

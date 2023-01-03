@@ -20,7 +20,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    # 이건 사용자가 url주소만 봐도 무슨내용인지 알수있게끔 slug처리해주는 것
+
+    def get_absolute_url(self):
+        return f'/blog/category/{self.slug}/'
+
     # 이건 admin 페이지에서 "어떤 이름으로 노출될 것인가"를 정해주는 기능이다.
+
     class Meta:
         # verbose는 "말이 많다"를 의미
         # plural은 "복수"를 의미함 (단수,복수의 그 복수)

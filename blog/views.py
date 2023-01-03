@@ -73,3 +73,32 @@ class PostDetail(DetailView):
             category=None).count()
 
         return context
+
+
+# FBV 방식
+def category_page(request, slug):
+    # category = Category.objects.get(slug=slug)
+
+    if slug == 'no_category':
+        category = '미분류'
+        post_list = Post.objects.filter(category=None)
+    else:
+        category = Category.objects.get(slug=slug)
+        post_list = Post.objects.filter(category=category)
+
+    return render(
+        request,
+        # 여기의 인자로 들어가는 값들은 이미 CBV 방식으로써 post_list.html에 전달되고 있기 때문에
+        # 어떤 인자를 보낼지에 대해서는 "딕셔너리"형태로 보내야 한다.
+        'blog/post_list.html', {
+            # 또한 이미 PostList의 CBV방식으로써 전달된 인자들에 대해서 언급이 되어야 한다.
+            # Post 중에서 Category.objects.get(slug=slug)로 필터링한 카테고리만 가져와줘
+            'post_list': post_list,
+            # 전체 카테고리
+            'categories': Category.objects.all(),
+            # post_list로 filtering한 개수를 알려줘
+            'no_category_post_count': Post.objects.filter(category=None).count(),
+            # category의 이름을 알려줘
+            'category': category
+        }
+    )
