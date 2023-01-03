@@ -65,3 +65,11 @@ class PostDetail(DetailView):
     # 에러 메세지
     # TemplateDoesNotExist at /blog/2/
     # blog/post_detail.html
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(
+            category=None).count()
+
+        return context

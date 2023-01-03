@@ -8,6 +8,14 @@
 <!-- Post Area start -->
 <!-- Page content-->
 <div id="post-area">
+    <!-- category start -->
+    {% if post.category %}
+    <span class="badge badge-secondary float-right">{{ post.category }}</span>
+    {% else %}
+    <span class="badge badge-secondary float-right">미분류</span>
+    {% endif %}
+    <!-- category end -->
+
     <!-- Post title-->
     <h1 class="fw-bolder mb-1">{{ post.title }}</h1>
     <h5 class="text-muted">{{ post.hook_text }}</h5>

@@ -169,16 +169,16 @@ class TestView(TestCase):
         self.assertIn('아직 게시물이 없습니다', main_area.text)
 
     def test_post_detail(self):
-        post_000 = Post.objects.create(
-            title='첫번째 포스트 입니다.',
-            content='Hello World. We are the world',
-            author=self.user_trump
-        )
+        # post_000 = Post.objects.create(
+        #     title='첫번째 포스트 입니다.',
+        #     content='Hello World. We are the world',
+        #     author=self.user_trump
+        # )
 
-        self.assertEqual(post_000.get_absolute_url(), '/blog/1/')
-        response = self.client.get(post_000.get_absolute_url())
+        self.assertEqual(post_001.get_absolute_url(), '/blog/1/')
+
+        response = self.client.get(post_001.get_absolute_url())
         self.assertEqual(response.status_code, 200)
-
         soup = BeautifulSoup(response.content, 'html.parser')
 
         self.navbar_test(soup)
