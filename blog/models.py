@@ -6,6 +6,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return f'/blog/tag/{self.slug}/'
+
+
 class Category(models.Model):
     # unique = True를 하면 "동일한 name"을 가지는 카테고리를 중복해서 만들 수 없다.
     name = models.CharField(max_length=50, unique=True)
@@ -84,6 +95,8 @@ class Post(models.Model):
     # 텍스트, 숫자의 null은 null이고, 계정, 카테고리등 목록선택창에서의 null은 blank이다.
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
+
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author}'

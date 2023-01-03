@@ -34,6 +34,18 @@ if 문 -->
         {% endif %}
         <!-- 소제목 코드 end -->
 
+        <!-- tag filter start -->
+        {% if p.tags.exists %}
+        <i class="fa-regular fa-tags"></i>
+            {% for tag in p.tags.iterator %}
+            <a href="{{ tag.get_absolute_url }}">
+                <span class="badge badge-pill badge-light">{{ tag }}</span></a>
+            {% endfor %}
+            <br>
+            <br>
+        {% endif %}
+        <!-- tag filter end -->
+
         <!-- 45개의 단어만 출력해준다는 필터 추가 -->
         <p class="card-text">{{ p.content|truncatewords:45 }}</p>
         <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
