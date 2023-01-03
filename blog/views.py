@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
-from .models import Post
+from .models import Post, Category
 
 # Create your views here.
 # def index(request):
@@ -10,6 +10,8 @@ from .models import Post
 #     return render(request, 'blog/post_list.html', {'posts':posts})
 
 # 위의 index를 CBV 방식인 이것으로 대체
+
+
 class PostList(ListView):
     model = Post
     # CBV 방식에 있어서 사용되는 첫번째 방법
@@ -32,6 +34,13 @@ class PostList(ListView):
     # 정렬순서를 업로드된 pk값(id값)을 기준하여 역순으로 정렬
     ordering = '-pk'
 
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        # 이 코드는 "카테고리가 지정되지 않은 post의 갯수를 세어라"라는 뜻이다.
+        context['no_category_post_count'] = Post.objects.filter(
+            category=None).count()
+        return context
 
 # def single_post_page(request, pk):
 #     post = Post.objects.get(pk = pk)
@@ -39,6 +48,8 @@ class PostList(ListView):
 #     return render(request, 'blog/post_detail.html', {'post':post})
 
 # 위의 single_post_page를 CBV 방식으로 대체
+
+
 class PostDetail(DetailView):
     model = Post
 
@@ -50,7 +61,6 @@ class PostDetail(DetailView):
     # 데이터셋을 전달할때는 ListView와는 약간 다르게 "<클래스명>"이다. 하지만 클래스명은 파이썬 문법적으로
     # 첫 문자는 대문자로 사용하는 반면, 전달되는 데이터셋은 대문자가 없는, 이를테면 Post를 model에 지정해줬다면
     # post라는 데이터셋이 post_detail.html이라는 이름의 파일로 가게된다 (template_name에 별도로 설정할경우 그곳으로)
-
 
     # 에러 메세지
     # TemplateDoesNotExist at /blog/2/

@@ -6,6 +6,27 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 
+class Category(models.Model):
+    # unique = True를 하면 "동일한 name"을 가지는 카테고리를 중복해서 만들 수 없다.
+    name = models.CharField(max_length=50, unique=True)
+
+    # slug는 검색엔진의 정확도를 높이는데 도움을 준다.
+    # blog/1/이런식으로 표기되던 것을 해당 포스트의 특징에 맞게 blog/text/이런식으로 된다고 한다.
+    # 게다가 띄어쓰기가 있으면 blog/text-area/이런식으로 -를 자동으로 기입하여 이어붙인다고 한다.
+    # slug는 기본적으로 한글을 지원하지 않기때문에, 한글을 사용하기 위해
+    # allow_unicode = True를 해준것이다.
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
+    # 이건 admin 페이지에서 "어떤 이름으로 노출될 것인가"를 정해주는 기능이다.
+    class Meta:
+        # verbose는 "말이 많다"를 의미
+        # plural은 "복수"를 의미함 (단수,복수의 그 복수)
+        verbose_name_plural = 'Categories'
+
+
 # 사용법 설명
 # def (함수)
 # 기본적으로 class 내부에 정의되는 def 함수들은 추후, urls, views를 통해서 연결된 html에서
@@ -53,6 +74,10 @@ class Post(models.Model):
 
     # SET_NULL을 하게되면 작성자 계정이 사라져도 게시글은 남아있다.
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    # 텍스트, 숫자의 null은 null이고, 계정, 카테고리등 목록선택창에서의 null은 blank이다.
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author}'
