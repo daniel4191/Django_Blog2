@@ -1,0 +1,18 @@
+{% extends 'blog/base_full_width.html' %}
+
+{% block head_title %}
+Edit Post - Blog
+{% endblock  %}
+
+{% block main_area %}
+<h1>Edit Post</h1>
+<hr>
+
+<!-- enctype="multipart/form-data"의 의미는 파일도 함께 전송하겠다는 의미 -->
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <button type="submit" class="btn btn-success float-right">Submit</button>
+</form>
+{% endblock  %}
