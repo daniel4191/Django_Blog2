@@ -1,4 +1,5 @@
 {% extends 'blog/base_full_width.html' %}
+{% load crispy_forms_tags %}
 
 {% block head_title %}
 Create Post - Blog
@@ -9,14 +10,15 @@ Create Post - Blog
 <hr>
 
 <!-- enctype="multipart/form-data"의 의미는 파일도 함께 전송하겠다는 의미 -->
-<form method="post" enctype="multipart/form-data">{% csrf_token %}
-    <table>
-        {{ form }}
-        <tr>
-            <th><label for="id_tags_str">Tags:</label></th>
-            <td><input type="text" name="tags_str" id="id_tags_str"></td>
-        </tr>
-    </table>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}    
+    <!-- 이렇게 crispy필터를 붙여줌으로 인해서 더이상 폼이 테이블 형태로 나타나지 않게 된다. -->
+    {{ form|crispy }}
+    <div id="div_id_tags_str">
+        <label for="id_tags_str">Tags:</label>
+        <input type="text" name="tags_str" id="id_tags_str" class="textinput textInput form-control">
+    </div>
+    <br>
     <button type="submit" class="btn btn-success float-right">Submit</button>
 </form>
+{{ form.media }}
 {% endblock  %}

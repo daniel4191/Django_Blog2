@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
-    path('', include('single_pages.urls'))
+    path('', include('single_pages.urls')),
+    path('markdownx/', include('markdownx.urls'))
 ]
 
 # 미디어 파일저장을 위한 것이라고는 하는데, 정확히 잘 모르겠다.

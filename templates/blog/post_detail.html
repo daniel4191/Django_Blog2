@@ -49,7 +49,8 @@
     {% endif %}
     <!-- Post content-->
     <section class="mb-5">
-        <p class="fs-5 mb-4">{{ post.content }}</p>
+        <!-- safe필터를 통해서 html 이스케이핑을 방지한다. -->
+        <p class="fs-5 mb-4">{{ post.get_content_markdown|safe }}</p>
 
         <!-- Tag code start -->
         {% if post.tags.exists %}

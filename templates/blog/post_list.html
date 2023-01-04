@@ -45,6 +45,9 @@ if 문 -->
         {% endif %}
         <!-- 소제목 코드 end -->
 
+        <!-- markdown 으로 html 이스케이핑 방지 -->
+        <p class="card-text">{{ p.get_content_markdown|truncatewords_html:45|safe }}</p>
+
         <!-- tag filter start -->
         {% if p.tags.exists %}
             <i class="fa-solid fa-tags"></i>

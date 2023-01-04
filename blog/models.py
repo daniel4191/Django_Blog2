@@ -2,8 +2,14 @@ import os
 
 from django.db import models
 from django.contrib.auth.models import User
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdown
 
 # Create your models here.
+
+
+class MyModel(models.Model):
+    myfield = MarkdownxField()
 
 
 class Tag(models.Model):
@@ -64,7 +70,7 @@ class Post(models.Model):
     title = models.CharField(max_length=30)
     # 노출되는 글씨의 수를 제한적으로 보여주는 소제목의 용도로 사용하기 위해 만든다고 보면 될것같다
     hook_text = models.CharField(max_length=100, blank=True)
-    content = models.TextField()
+    content = MarkdownxField()
 
     # 설명1. upload_to
     # 이거는 지정된 위치의 폴더에 연도/시간/일 단위로 쪼개서
@@ -112,3 +118,6 @@ class Post(models.Model):
     # 첨부파일의 확장자를 확인
     def get_file_ext(self):
         return self.file_name().split('.')[-1]
+
+    def get_content_markdown(self):
+        return markdown(self.content)

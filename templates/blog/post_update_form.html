@@ -1,4 +1,5 @@
 {% extends 'blog/base_full_width.html' %}
+{% load crispy_forms_tags %}
 
 {% block head_title %}
 Edit Post - Blog
@@ -9,14 +10,15 @@ Edit Post - Blog
 <hr>
 
 <!-- enctype="multipart/form-data"의 의미는 파일도 함께 전송하겠다는 의미 -->
-<form method="post" enctype="multipart/form-data">{% csrf_token %}
-    <table>
-        {{ form }}
-        <tr>
-            <ht><label for="id_tags_str">Tags:</label></ht>
-            <td><input type="text" name="tags_str" id="id_tags_str" value="{{ tags_str_default }}"></td>
-        </tr>
-    </table>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}    
+    {{ form|crispy }}
+    <div id="div_id_tags_str">
+        <label for="id_tags_str">Tags:</label>
+        <input type="text" name="tags_str" id="id_tags_str" 
+        class="textinput textInput form-control" value="{{ tags_str_default }}">
+    </div>
+    <br>
     <button type="submit" class="btn btn-success float-right">Submit</button>
 </form>
+{{ form.media }}
 {% endblock  %}
