@@ -12,6 +12,10 @@ Edit Post - Blog
 <form method="post" enctype="multipart/form-data">{% csrf_token %}
     <table>
         {{ form }}
+        <tr>
+            <ht><label for="id_tags_str">Tags:</label></ht>
+            <td><input type="text" name="tags_str" id="id_tags_str" value="{{ tags_str_default }}"></td>
+        </tr>
     </table>
     <button type="submit" class="btn btn-success float-right">Submit</button>
 </form>

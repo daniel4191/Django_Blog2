@@ -134,6 +134,7 @@ class PostCreate(LoginRequiredMixin, CreateView, UserPassesTestMixin):
         # is_authenticated로 로그인을 한 상태이면서 최근에 들어온 유저가 스태프 이거나 관리자계정일때
         if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
             form.instance.author = current_user
+            # 태그를 텍스트로 사용할 수 있게 하는 기능 start
             response = super(PostCreate, self).form_valid(form)
 
             tags_str = self.request.POST.get('tags_str')
@@ -153,6 +154,7 @@ class PostCreate(LoginRequiredMixin, CreateView, UserPassesTestMixin):
 
             # return super(PostCreate, self).form_valid(form)
             return response
+            # 태그를 텍스트로 사용할 수 있게 하는 기능 end
 
         else:
             return redirect('/blog/')
@@ -165,8 +167,39 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
     template_name = 'blog/post_update_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdate, self).get_context_data()
+        if self.object.tags.exists():
+            tags_str_list = list()
+            for t in self.object.tags.all():
+                tags_str_list.append(t.name)
+            context['tags_str_default'] = '; '.join(tags_str_list)
+
+        return context
+
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user == self.get_object().author:
             return super(PostUpdate, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
+
+    def form_valid(self, form):
+        response = super(PostUpdate, self).form_valid(form)
+        self.object.tags.clear()
+
+        tags_str = self.request.POST.get('tags_str')
+
+        if tags_str:
+            tags_str = tags_str.strip()
+            tags_str = tags_str.replace(',', ';')
+            tags_list = tags_str.split(';')
+
+            for t in tags_list:
+                t = t.strip()
+                tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                if is_tag_created:
+                    tag.slug = slugify(t, allow_unicode=True)
+                    tag.save()
+                self.object.tags.add(tag)
+
+        return response
