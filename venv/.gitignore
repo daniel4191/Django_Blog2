@@ -16,3 +16,4 @@ venv.bak/
 .idea/
 migrations/
 _media/
+settings.py

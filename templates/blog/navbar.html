@@ -1,3 +1,5 @@
+{% load socialaccount %}
+
 <!-- bootstrap's navbar start -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">    
     <div class="container">
@@ -6,36 +8,48 @@
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/blog/">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/about_me/">About Me</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">
-                        <i class="fa-solid fa-right-to-bracket"></i>&nbsp Log In</a>
-                </li>
-            </ul>
-        </div>
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/blog/">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about_me/">About Me</a>
+            </li>       
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown link
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <!-- logout button start -->
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/accounts/logout">Log Out</a>                    
+                </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">
+                    <i class="fa-solid fa-right-to-bracket"></i>&nbsp Log In</a>
+            </li>
+            {% endif %}
+            <!-- logout button end -->                        
+        </ul>        
     </div>
 </nav>
 <!-- bootstrap's navbar end -->
@@ -53,15 +67,16 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-outline-dark btn-block btn-sm">
-                            <i class="fa-brands fa-google"></i>&nbsp&nbsp Log in with Goole</button>
-                        <button type="button" class="btn btn-outline-dark btn-block btn-sm"><i
-                                class="fa-regular fa-envelope"></i>&nbsp&nbsp
-                            Log in with E-mail</button>
+                        <a role="button" class="btn btn-outline-dark btn-block btn-sm" 
+                        href="{% provider_login_url 'google' %}">
+                            <i class="fa-brands fa-google"></i>&nbsp&nbsp Log in with Goole</a>
+                        <a role="button" class="btn btn-outline-dark btn-block btn-sm" 
+                        href="/accounts/login/"><i class="fa-regular fa-envelope"></i>&nbsp&nbsp
+                            Log in with E-mail</a>
                     </div>
                     <div class="col-md-6">
-                        <button type="button" class="btn btn-outline-dark btn-block btn-sm">
-                            <i class="fa-regular fa-envelope"></i>&nbsp&nbsp Sign Up with E-mail</button>
+                        <a role="button" class="btn btn-outline-dark btn-block btn-sm" 
+                        href="/accounts/signup/"><i class="fa-regular fa-envelope"></i>&nbsp&nbsp Sign Up with E-mail</a>
                     </div>
                 </div>
             </div>
