@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from django.views.generic.edit import View, BaseFormView
+from django.db.models import Q
 
 from .models import Post, Category, Tag, Comment
 from .forms import CommentForm
@@ -251,3 +252,30 @@ def delete_comment(request, pk):
         return redirect(post.get_absolute_url())
     else:
         raise PermissionDenied
+
+
+class PostSearch(PostList):
+    # 검색결과를 한페이지에 모두 보여주기 위해 poaginate를 none으로 잡았다.
+    paginate_by = None
+
+    def get_queryset(self):
+        # PostList는 ListView를 상속받아 만들어졌고, ListView는 기본적으로 get_queryset()메서드를 제공한다.
+        # 이 메서드는 기본적으로 model로 지정된 요소 전체를 가져오는 역할을 하는데,
+        # PostList에서 Post 모델로 지정이 되어있다.
+        # 검색 결과로 필요한 것은 Post.objects.all()이 아니기 때문에, 필요한 검색결과만 받아오기 위한 수식이다.
+        q = self.kwargs['q']
+        post_list = Post.objects.filter(
+            # |는 or라는 뜻이다.
+            # __라고 더블 언더라인을 써주는 이유는 "쿼리셋"즉, 데이터베이스를 기반으로 조작하는 명령이기 때문이다.
+            # __라고 안해도 된다고는 하지만 일종의 문법적 약속이라는 것 같다.
+            Q(title__contains=q) | Q(tags__name__contains=q)
+            # distinct()는 중복방지
+        ).distinct()
+        return post_list
+
+    def get_context_data(self, **kwargs):
+        context = super(PostSearch, self).get_context_data()
+        q = self.kwargs['q']
+        context['search_info'] = f'Search: {q} ({self.get_queryset().count()})'
+
+        return context

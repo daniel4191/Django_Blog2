@@ -12,9 +12,9 @@
 <!-- 로그인 했을때 New Post 버튼 표시 end -->
 
 <h1>Blog
-        {% if category %}<span class="badge badge-success">{{ category }}</span>
-    {% endif %}
-        {% if tag %}<span class="badge badge-success"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
+    {% if search_info %}<small class="text-muted">{{ search_info }}</small>{% endif %}
+    {% if category %}<span class="badge badge-success">{{ category }}</span>{% endif %}
+    {% if tag %}<span class="badge badge-success"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
 </h1>
 
     <!-- tests.py의 마지막에 포스트가 없을경우 '아직 게시물이 없습니다.'를 만들어 주기 위한

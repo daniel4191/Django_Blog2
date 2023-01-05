@@ -33,8 +33,8 @@
                     <div class="card-body">
                         <div class="input-group">
                             <input class="form-control" type="text" placeholder="Enter search term..."
-                                aria-label="Enter search term..." aria-describedby="button-search" />
-                            <button class="btn btn-success" id="button-search" type="button">Go!</button>
+                                aria-label="Enter search term..." aria-describedby="button-search" id="search-input">
+                            <button class="btn btn-success" id="button-search" type="button" onclick="searchPost();">Go!</button>
                         </div>
                     </div>
                 </div>
@@ -105,6 +105,26 @@
 
     <!-- kit code link-->
     <script src="https://kit.fontawesome.com/5d3e297a3b.js" crossorigin="anonymous"></script>
-</body>
 
+    <!-- 검색기능 JS start -->
+    <script>
+        function searchPost(){
+            let searchValue = document.getElementById("search-input").value.trim();
+            if (searchValue.length > 1){
+                location.href="/blog/search/" + searchValue + "/";
+            }
+            else{
+                alert('검색어('+searchValue +')가 너무 짧습니다.');
+            }
+        };
+
+        document.getElementById('search-input').addEventListener('keyup', function(event)
+        {
+            if(event.key == 'Enter'){
+                searchPost();
+            }
+        });
+    </script>
+    <!-- 검색기능 JS end -->
+</body>
 </html>
