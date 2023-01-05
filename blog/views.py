@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.views.generic.edit import View, BaseFormView
 
 from .models import Post, Category, Tag
+from .forms import CommentForm
 
 # Create your views here.
 # def index(request):
@@ -75,6 +76,7 @@ class PostDetail(DetailView):
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(
             category=None).count()
+        context['comment_form'] = CommentForm
 
         return context
 
@@ -204,3 +206,26 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
                 self.object.tags.add(tag)
 
         return response
+
+
+def new_comment(request, pk):
+    # 링크를 타고 들어오는 것이든, 어떤 방법으로든 코멘트가 있는 페이지에 들어왔을때
+    # 로그인이 안되어있다면 404에러를 내어주는 셋팅이다.
+    if request.user.is_authenticated:
+        post = get_object_or_404(Post, pk=pk)
+
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST)
+
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                return redirect(comment.get_absolute_url())
+
+        else:
+            return redirect(post.get_absolute_url())
+
+    else:
+        raise PermissionDenied
