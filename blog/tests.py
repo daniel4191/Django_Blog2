@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
 
 
 # Create your tests here.
@@ -55,6 +55,12 @@ class TestView(TestCase):
         )
         self.post_003.tags.add(self.tag_python_kor)
         self.post_003.tags.add(self.tag_python)
+
+        self.comment_001 = Comment.objects.create(
+            post=self.post_001,
+            author=self.user_obama,
+            content='첫 번째 댓글입니다.'
+        )
 
     def category_card_test(self, soup):
         categories_card = soup.find('div', id='categories-card')
@@ -249,7 +255,7 @@ class TestView(TestCase):
         # comment area
         comments_area = soup.find('div', id='comment-area')
         comment_001_area = comments_area.find('div', id='comment-1')
-        self.assertIn(comment_001.author.username, comment_001_area.text)
+        self.assertIn(self.comment_001.author.username, comment_001_area.text)
         self.assertIn(self.comment_001.content, comment_001_area.text)
 
     def test_tag_page(self):

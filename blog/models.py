@@ -132,3 +132,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.author}::{self.content}'
+
+    # 이게 있음으로 인해서 실질적으로 작성된 댓글 확인이 가능하다.
+    def get_absolute_url(self):
+        return f'{self.post.get_absolute_url()}#comment-{self.pk}'

@@ -46,7 +46,7 @@ if 문 -->
         <!-- 소제목 코드 end -->
 
         <!-- markdown 으로 html 이스케이핑 방지 -->
-        <p class="card-text">{{ p.get_content_markdown|truncatewords_html:45|safe }}</p>
+        <p class="card-text">{{ p.content|linebreaks|truncatewords_html:45|safe }}</p>
 
         <!-- tag filter start -->
         {% if p.tags.exists %}
@@ -62,7 +62,7 @@ if 문 -->
         <!-- tag filter end -->
 
         <!-- 45개의 단어만 출력해준다는 필터 추가 -->
-        <p class="card-text">{{ p.content|truncatewords:45 }}</p>
+        <p class="card-text">{{ p.content|linebreaks|truncatewords:45 }}</p>
         <a class="btn btn-success" href="{{ p.get_absolute_url }}">Read more →</a>
     </div>
     {% comment %} 새로 추가된 부분 {% endcomment %}
