@@ -9,7 +9,7 @@
     <title>{% block head_title %}Blog{% endblock %}</title>
 
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />        
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />      
 
     {% comment %} local bootstrap css {% endcomment %}
     <link href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen" rel="stylesheet" type="text/css">    
@@ -108,6 +108,7 @@
 
     <!-- 검색기능 JS start -->
     <script>
+        <!-- 검색해야하는 글씨가 무조건 2글자 이상이게끔하는 기능 -->
         function searchPost(){
             let searchValue = document.getElementById("search-input").value.trim();
             if (searchValue.length > 1){
@@ -118,6 +119,7 @@
             }
         };
 
+        <!-- Enter키로도 검색 작동이 되게끔하는 기능 -->
         document.getElementById('search-input').addEventListener('keyup', function(event)
         {
             if(event.key == 'Enter'){
