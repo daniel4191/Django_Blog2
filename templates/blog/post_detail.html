@@ -117,7 +117,8 @@
         {% for comment in post.comment_set.iterator %}
         <!-- Single comment -->
         <div class="media mb-4" id="comment-{{ comment.pk }}">
-            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+            <img class="d-flex mr-3 rounded-circle" src="{{ comment.get_avatar_url }}" 
+            alt="{{ comment.author }}" width="60px">
             <div class="media-body">
 
                 <!-- 글 작성자 본인에게만 edit을 띄워주기 start -->

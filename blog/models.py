@@ -136,3 +136,10 @@ class Comment(models.Model):
     # 이게 있음으로 인해서 실질적으로 작성된 댓글 확인이 가능하다.
     def get_absolute_url(self):
         return f'{self.post.get_absolute_url()}#comment-{self.pk}'
+
+    # 구글로 로그인한 사람의 프로필을 보여주기
+    def get_avatar_url(self):
+        if self.author.socialaccount_set.exists():
+            return self.author.socialaccount_set.first().get_avatar_url()
+        else:
+            return f'https://doitdjango.com/avatar/id/1408/16919788e968df27/svg/{self.author.email}'
