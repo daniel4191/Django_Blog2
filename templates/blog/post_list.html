@@ -17,63 +17,93 @@
         {% if tag %}<span class="badge badge-success"><i class="fa-solid fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
 </h1>
 
-<!-- tests.py의 마지막에 포스트가 없을경우 '아직 게시물이 없습니다.'를 만들어 주기 위한
-if 문 -->
-{% if post_list.exists %}
+    <!-- tests.py의 마지막에 포스트가 없을경우 '아직 게시물이 없습니다.'를 만들어 주기 위한
+    if 문 -->
+    {% if post_list.exists %}
 
-<!-- Django added -->
-{% for p in post_list %}
+    <!-- Django added -->
+    {% for p in post_list %}
 
-<!-- Blog post start -->
-<div class="card mb-4" id="post-{{ p.pk }}">
-    {% if p.head_image %}
-    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image"/>
-    {% else %}
-    {% comment %} p.id나 p.pk나 동일하다 {% endcomment %}
-    <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
-    {% endif %}
-    <div class="card-body">
-        {% if p.category %}
-        <span class="badge badge-success float-right">{{ p.category }}</span>
+    <!-- Blog post start -->
+    <div class="card mb-4" id="post-{{ p.pk }}">
+        {% if p.head_image %}
+        <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image"/>
         {% else %}
-        <span class="badge badge-success float-right">미분류</span>
+        {% comment %} p.id나 p.pk나 동일하다 {% endcomment %}
+        <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
         {% endif %}
-        <h2 class="card-title">{{ p.title }}</h2>
-        <!-- 소제목 코드 start -->
-        {% if p.hook_text %}
-        <h5 class="text-muted">{{ p.hook_text }}</h5>
-        {% endif %}
-        <!-- 소제목 코드 end -->
+        <div class="card-body">
+            {% if p.category %}
+            <span class="badge badge-success float-right">{{ p.category }}</span>
+            {% else %}
+            <span class="badge badge-success float-right">미분류</span>
+            {% endif %}
+            <h2 class="card-title">{{ p.title }}</h2>
+            <!-- 소제목 코드 start -->
+            {% if p.hook_text %}
+            <h5 class="text-muted">{{ p.hook_text }}</h5>
+            {% endif %}
+            <!-- 소제목 코드 end -->
 
-        <!-- markdown 으로 html 이스케이핑 방지 -->
-        <p class="card-text">{{ p.content|linebreaks|truncatewords_html:45|safe }}</p>
+            <!-- markdown 으로 html 이스케이핑 방지 -->
+            <p class="card-text">{{ p.content|linebreaks|truncatewords_html:45|safe }}</p>
 
-        <!-- tag filter start -->
-        {% if p.tags.exists %}
-            <i class="fa-solid fa-tags"></i>
-            {% for tag in p.tags.iterator %}
-            <a href="{{ tag.get_absolute_url }}">
-                <span class="badge badge-pill badge-success">{{ tag }}</span></a>
-            {% endfor %}
-            
-            <br>
-            <br>
-        {% endif %}
-        <!-- tag filter end -->
+            <!-- tag filter start -->
+            {% if p.tags.exists %}
+                <i class="fa-solid fa-tags"></i>
+                {% for tag in p.tags.iterator %}
+                <a href="{{ tag.get_absolute_url }}">
+                    <span class="badge badge-pill badge-success">{{ tag }}</span></a>
+                {% endfor %}
+                
+                <br>
+                <br>
+            {% endif %}
+            <!-- tag filter end -->
 
-        <!-- 45개의 단어만 출력해준다는 필터 추가 -->
-        <p class="card-text">{{ p.content|linebreaks|truncatewords:45 }}</p>
-        <a class="btn btn-success" href="{{ p.get_absolute_url }}">Read more →</a>
+            <!-- 45개의 단어만 출력해준다는 필터 추가 -->
+            <p class="card-text">{{ p.content|linebreaks|truncatewords:45 }}</p>
+            <a class="btn btn-success" href="{{ p.get_absolute_url }}">Read more →</a>
+        </div>
+        {% comment %} 새로 추가된 부분 {% endcomment %}
+        <div class="card-footer text-muted">
+            Posted on {{ p.created_at }} by
+            <a href="#">{{ p.author|upper }}</a>
+        </div>
     </div>
-    {% comment %} 새로 추가된 부분 {% endcomment %}
-    <div class="card-footer text-muted">
-        Posted on {{ p.created_at }} by
-        <a href="#">{{ p.author|upper }}</a>
-    </div>
-</div>
-<!-- Blog post end -->
-{% endfor %}
-{% else %}
-<h3>아직 게시물이 없습니다.</h3>
-{% endif %}
+    <!-- Blog post end -->
+    {% endfor %}
+    {% else %}
+    <h3>아직 게시물이 없습니다.</h3>
+    {% endif %}
+
+    <!-- pagination start-->
+
+    {% if is_paginated %}
+    <ul class="pagination justify-content-center mb-4">
+
+        <!-- 다음페이지가 있는지를 알아내어 버튼의 비활성화 여부를 결정해줌 -->
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">&larr; Older</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#">&larr; Order</a>
+            </li>
+        {% endif %}
+
+        <!-- 이전페이지가 있는지를 알아내어 버튼의 비활성화 여부를 결정해줌 -->
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Newer &rarr;</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Newer &rarr;</a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+    <!-- pagination end-->
 {% endblock  %}

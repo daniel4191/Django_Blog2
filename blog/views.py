@@ -38,6 +38,7 @@ class PostList(ListView):
 
     # 정렬순서를 업로드된 pk값(id값)을 기준하여 역순으로 정렬
     ordering = '-pk'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
