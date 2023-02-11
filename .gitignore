@@ -1,0 +1,10 @@
+settings.py
+settings
+__init__.py
+__pycache__.py
+db.sqlite3
+db.sqlite3-journal
+media
+*.log
+*.pot
+*.pyc
